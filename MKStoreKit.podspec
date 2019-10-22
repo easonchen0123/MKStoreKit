@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
 
   s.description = 'MKStoreKit.'
 
-  s.source_files = '*.{h,m}, Externals/*.{h,m}'
+  s.source_files = '*.{h,m}', 'Externals/*.{h,m}'
   s.requires_arc =  true
   s.framework = 'Foundation'
 end
