@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.summary  = 'MKStoreKit.'
   s.homepage = 'https://github.com/easonchen0123/MKStoreKit'
   s.author   = { 'Alexis Creuzot' => 'alexis.creuzot@gmail.com' }
-  s.source   = { :git => 'https://github.com/easonchen0123/KASlideShow.git',
+  s.source   = { :git => 'https://github.com/easonchen0123/MKStoreKit.git',
                   :branch => '4.99b1'}
 
   s.description = 'MKStoreKit.'
