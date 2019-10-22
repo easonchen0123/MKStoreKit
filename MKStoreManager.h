@@ -59,6 +59,7 @@
 
 @property (nonatomic, strong) NSMutableArray *purchasableObjects;
 @property (nonatomic, strong) NSMutableDictionary *subscriptionProducts;
+@property (nonatomic, strong) NSString *sharedSecret;
 #ifdef __IPHONE_6_0
 @property (strong, nonatomic) NSMutableArray *hostedContents;
 @property (nonatomic, copy) void (^hostedContentDownloadStatusChangedHandler)(NSArray* hostedContent);

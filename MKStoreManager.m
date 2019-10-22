@@ -183,6 +183,9 @@ static MKStoreManager* _sharedStoreManager;
       _sharedStoreManager.hostedContents = [NSMutableArray array];
 #endif
       [_sharedStoreManager requestProductData];
+    //SharedSecret
+            NSString *sharedSecret = [[MKStoreManager storeKitItems] objectForKey:@"SharedSecret"];
+            _sharedStoreManager.sharedSecret = sharedSecret ? sharedSecret : kSharedSecret;
       [[SKPaymentQueue defaultQueue] addTransactionObserver:_sharedStoreManager];
       [_sharedStoreManager startVerifyingSubscriptionReceipts];
     });
