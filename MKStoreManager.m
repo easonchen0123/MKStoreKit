@@ -57,9 +57,8 @@
 @property (nonatomic, copy) void (^onRestoreCompleted)();
 
 @property (nonatomic, assign, getter=isProductsAvailable) BOOL isProductsAvailable;
-@property (nonatomic, assign) NSInteger subscriptionCount;
-@property (nonatomic, assign) NSInteger verifiedSubscriptionCount;
-
+@property (nonatomic, assign) NSInteger receiptCount;
+@property (nonatomic, assign) NSInteger verifiedReceiptCount;
 @property (nonatomic, strong) SKProductsRequest *productsRequest;
 
 - (void) requestProductData;
@@ -504,50 +503,53 @@ static MKStoreManager* _sharedStoreManager;
 
 - (void) startVerifyingSubscriptionReceipts
 {
-  NSDictionary *subscriptions = [[MKStoreManager storeKitItems] objectForKey:@"Subscriptions"];
+    NSDictionary *subscriptions = [[MKStoreManager storeKitItems] objectForKey:@"Subscriptions"];
   
-  self.subscriptionProducts = [NSMutableDictionary dictionary];
-    self.subscriptionCount = [[self.subscriptionProducts allKeys] count];
-  for(NSString *productId in [subscriptions allKeys])
-  {
-    MKSKSubscriptionProduct *product = [[MKSKSubscriptionProduct alloc] initWithProductId:productId subscriptionDays:[[subscriptions objectForKey:productId] intValue]];
-    product.receipt = [MKStoreManager dataForKey:productId]; // cached receipt
+    self.subscriptionProducts = [NSMutableDictionary dictionary];
     
-    if(product.receipt)
-    {
-      [product verifyReceiptOnComplete:^(NSNumber* isActive)
-       {
-         if([isActive boolValue] == NO)
-         {
-           [[NSNotificationCenter defaultCenter] postNotificationName:kSubscriptionsInvalidNotification
-                                                               object:product.productId];
-           
-           NSLog(@"Subscription: %@ is inactive", product.productId);
-           product.receipt = nil;
-           [self.subscriptionProducts setObject:product forKey:productId];
-           [MKStoreManager setObject:nil forKey:product.productId];
-         }
-         else
-         {
-           NSLog(@"Subscription: %@ is active", product.productId);
-         }
-          self.verifiedSubscriptionCount++;
-          if (self.verifiedSubscriptionCount == self.subscriptionCount) {
-              NSLog(@"all subscriptions verified!");
-          }
-       }
-                               onError:^(NSError* error)
-       {
-         NSLog(@"Unable to check for subscription validity right now");
-          self.verifiedSubscriptionCount++;
-          if (self.verifiedSubscriptionCount == self.subscriptionCount) {
-              NSLog(@"all subscriptions verified!");
-          }
-       }];
+    self.receiptCount = 0;
+    for (NSString *productId in [subscriptions allKeys]) {
+        MKSKSubscriptionProduct *product = [[MKSKSubscriptionProduct alloc] initWithProductId:productId subscriptionDays:[[subscriptions objectForKey:productId] intValue]];
+        product.receipt = [MKStoreManager dataForKey:productId]; // cached receipt
+      
+        if (product.receipt) {
+            self.receiptCount++;
+        }
     }
     
-    [self.subscriptionProducts setObject:product forKey:productId];
-  }
+    for(NSString *productId in [subscriptions allKeys]) {
+        MKSKSubscriptionProduct *product = [[MKSKSubscriptionProduct alloc] initWithProductId:productId subscriptionDays:[[subscriptions objectForKey:productId] intValue]];
+        product.receipt = [MKStoreManager dataForKey:productId]; // cached receipt
+
+        if (product.receipt) {
+            [product verifyReceiptOnComplete:^(NSNumber* isActive) {
+                if ([isActive boolValue] == NO) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kSubscriptionsInvalidNotification
+                                                                        object:product.productId];
+               
+                    NSLog(@"Subscription: %@ is inactive", product.productId);
+                    product.receipt = nil;
+                    [self.subscriptionProducts setObject:product forKey:productId];
+                    [MKStoreManager setObject:nil forKey:product.productId];
+                } else {
+                    NSLog(@"Subscription: %@ is active", product.productId);
+                }
+              
+                self.verifiedReceiptCount++;
+                if (self.verifiedReceiptCount == self.receiptCount) {
+                    NSLog(@"all subscriptions verified!");
+                }
+           } onError:^(NSError* error) {
+               NSLog(@"Unable to check for subscription validity right now");
+               self.verifiedReceiptCount++;
+               if (self.verifiedReceiptCount == self.receiptCount) {
+                   NSLog(@"all subscriptions verified!");
+               }
+           }];
+        }
+
+        [self.subscriptionProducts setObject:product forKey:productId];
+    }
 }
 
 -(NSData*) receiptFromBundle {
