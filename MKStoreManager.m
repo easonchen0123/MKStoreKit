@@ -538,12 +538,16 @@ static MKStoreManager* _sharedStoreManager;
                 self.verifiedReceiptCount++;
                 if (self.verifiedReceiptCount == self.receiptCount) {
                     NSLog(@"all subscriptions verified!");
+                    [[NSNotificationCenter defaultCenter] postNotificationName:kSubscriptionsVerifiedNotification
+                                                                        object:@(YES)];
                 }
            } onError:^(NSError* error) {
                NSLog(@"Unable to check for subscription validity right now");
                self.verifiedReceiptCount++;
                if (self.verifiedReceiptCount == self.receiptCount) {
                    NSLog(@"all subscriptions verified!");
+                   [[NSNotificationCenter defaultCenter] postNotificationName:kSubscriptionsVerifiedNotification
+                                                                       object:@(NO)];
                }
            }];
         }

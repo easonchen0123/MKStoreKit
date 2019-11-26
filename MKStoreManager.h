@@ -48,6 +48,7 @@
 #define kProductFetchedNotification @"MKStoreKitProductsFetched"
 #define kSubscriptionsPurchasedNotification @"MKStoreKitSubscriptionsPurchased"
 #define kSubscriptionsInvalidNotification @"MKStoreKitSubscriptionsInvalid"
+#define kSubscriptionsVerifiedNotification @"MKStoreKitSubscriptionsVerified"
 
 @interface MKStoreManager : NSObject<SKProductsRequestDelegate, SKPaymentTransactionObserver>
 
