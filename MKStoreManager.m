@@ -508,6 +508,7 @@ static MKStoreManager* _sharedStoreManager;
     self.subscriptionProducts = [NSMutableDictionary dictionary];
     
     self.receiptCount = 0;
+    self.isSubscriptionVerified = NO;
     for (NSString *productId in [subscriptions allKeys]) {
         MKSKSubscriptionProduct *product = [[MKSKSubscriptionProduct alloc] initWithProductId:productId subscriptionDays:[[subscriptions objectForKey:productId] intValue]];
         product.receipt = [MKStoreManager dataForKey:productId]; // cached receipt
@@ -543,6 +544,7 @@ static MKStoreManager* _sharedStoreManager;
               
                 self.verifiedReceiptCount++;
                 if (self.verifiedReceiptCount == self.receiptCount) {
+                    self.isSubscriptionVerified = YES;
                     NSLog(@"all subscriptions verified!");
                     [[NSNotificationCenter defaultCenter] postNotificationName:kSubscriptionsVerifiedNotification
                                                                         object:@(YES)];
