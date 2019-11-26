@@ -57,6 +57,8 @@
 @property (nonatomic, copy) void (^onRestoreCompleted)();
 
 @property (nonatomic, assign, getter=isProductsAvailable) BOOL isProductsAvailable;
+@property (nonatomic, assign) NSInteger subscriptionCount;
+@property (nonatomic, assign) NSInteger verifiedSubscriptionCount;
 
 @property (nonatomic, strong) SKProductsRequest *productsRequest;
 
@@ -505,6 +507,7 @@ static MKStoreManager* _sharedStoreManager;
   NSDictionary *subscriptions = [[MKStoreManager storeKitItems] objectForKey:@"Subscriptions"];
   
   self.subscriptionProducts = [NSMutableDictionary dictionary];
+    self.subscriptionCount = [self.subscriptionProducts count];
   for(NSString *productId in [subscriptions allKeys])
   {
     MKSKSubscriptionProduct *product = [[MKSKSubscriptionProduct alloc] initWithProductId:productId subscriptionDays:[[subscriptions objectForKey:productId] intValue]];
@@ -528,10 +531,18 @@ static MKStoreManager* _sharedStoreManager;
          {
            NSLog(@"Subscription: %@ is active", product.productId);
          }
+          self.verifiedSubscriptionCount++;
+          if (self.verifiedSubscriptionCount == self.subscriptionCount) {
+              NSLog(@"all subscriptions verified!");
+          }
        }
                                onError:^(NSError* error)
        {
          NSLog(@"Unable to check for subscription validity right now");
+          self.verifiedSubscriptionCount++;
+          if (self.verifiedSubscriptionCount == self.subscriptionCount) {
+              NSLog(@"all subscriptions verified!");
+          }
        }];
     }
     
