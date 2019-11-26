@@ -517,6 +517,12 @@ static MKStoreManager* _sharedStoreManager;
         }
     }
     
+    if (self.receiptCount == 0) {
+        NSLog(@"no subscription receipt!");
+        [[NSNotificationCenter defaultCenter] postNotificationName:kSubscriptionsVerifiedNotification
+                                                            object:@(NO)];
+    }
+    
     for(NSString *productId in [subscriptions allKeys]) {
         MKSKSubscriptionProduct *product = [[MKSKSubscriptionProduct alloc] initWithProductId:productId subscriptionDays:[[subscriptions objectForKey:productId] intValue]];
         product.receipt = [MKStoreManager dataForKey:productId]; // cached receipt
