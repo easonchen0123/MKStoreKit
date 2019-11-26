@@ -507,7 +507,7 @@ static MKStoreManager* _sharedStoreManager;
   NSDictionary *subscriptions = [[MKStoreManager storeKitItems] objectForKey:@"Subscriptions"];
   
   self.subscriptionProducts = [NSMutableDictionary dictionary];
-    self.subscriptionCount = [self.subscriptionProducts count];
+    self.subscriptionCount = [[self.subscriptionProducts allKeys] count];
   for(NSString *productId in [subscriptions allKeys])
   {
     MKSKSubscriptionProduct *product = [[MKSKSubscriptionProduct alloc] initWithProductId:productId subscriptionDays:[[subscriptions objectForKey:productId] intValue]];
