@@ -520,6 +520,7 @@ static MKStoreManager* _sharedStoreManager;
     
     if (self.receiptCount == 0) {
         NSLog(@"no subscription receipt!");
+        self.isSubscriptionVerified = YES;
         [[NSNotificationCenter defaultCenter] postNotificationName:kSubscriptionsVerifiedNotification
                                                             object:@(NO)];
     }
@@ -544,8 +545,8 @@ static MKStoreManager* _sharedStoreManager;
               
                 self.verifiedReceiptCount++;
                 if (self.verifiedReceiptCount == self.receiptCount) {
-                    self.isSubscriptionVerified = YES;
                     NSLog(@"all subscriptions verified!");
+                    self.isSubscriptionVerified = YES;
                     [[NSNotificationCenter defaultCenter] postNotificationName:kSubscriptionsVerifiedNotification
                                                                         object:@(YES)];
                 }
