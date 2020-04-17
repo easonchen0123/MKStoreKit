@@ -87,7 +87,7 @@ static MKStoreManager* _sharedStoreManager;
       NSError *error = nil;
       [SFHFKeychainUtils storeUsername:obj
                            andPassword:valueFromiCloud
-                        forServiceName:@"MKStoreKit"
+                        forServiceName:kServiceName
                         updateExisting:YES
                                  error:&error];
       if(error) NSLog(@"%@", error);
@@ -122,7 +122,7 @@ static MKStoreManager* _sharedStoreManager;
     }
     
     NSError *error = nil;
-    [SFHFKeychainUtils storeUsername:key andPassword:objectString forServiceName:@"MKStoreKit" updateExisting:YES error:&error];
+    [SFHFKeychainUtils storeUsername:key andPassword:objectString forServiceName:kServiceName updateExisting:YES error:&error];
     if(error) NSLog(@"%@", error);
     
     if([self iCloudAvailable]) {
@@ -132,7 +132,7 @@ static MKStoreManager* _sharedStoreManager;
   } else {
     
     NSError *error = nil;
-    [SFHFKeychainUtils deleteItemForUsername:key andServiceName:@"MKStoreKit" error:&error];
+    [SFHFKeychainUtils deleteItemForUsername:key andServiceName:kServiceName error:&error];
     if(error) NSLog(@"%@", error);
     
     if([self iCloudAvailable]) {
@@ -154,7 +154,7 @@ static MKStoreManager* _sharedStoreManager;
 +(id) objectForKey:(NSString*) key
 {
   NSError *error = nil;
-  id password = [SFHFKeychainUtils getPasswordForUsername:key andServiceName:@"MKStoreKit" error:&error];
+  id password = [SFHFKeychainUtils getPasswordForUsername:key andServiceName:kServiceName error:&error];
   if(error) NSLog(@"%@", error);
   
   return password;
@@ -272,7 +272,7 @@ static MKStoreManager* _sharedStoreManager;
   
   //loop through all the saved keychain data and remove it
   for (int i = 0; i < itemCount; i++ ) {
-    [SFHFKeychainUtils deleteItemForUsername:[productsArray objectAtIndex:i] andServiceName:@"MKStoreKit" error:&error];
+    [SFHFKeychainUtils deleteItemForUsername:[productsArray objectAtIndex:i] andServiceName:kServiceName error:&error];
   }
   if (!error) {
     return YES;

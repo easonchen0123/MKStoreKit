@@ -41,8 +41,10 @@
 
 #ifdef DEBUG
 #define kReceiptValidationURL @"https://sandbox.itunes.apple.com/verifyReceipt"
+#define kServiceName @"MKStoreKit_DEBUG"
 #else
 #define kReceiptValidationURL @"https://buy.itunes.apple.com/verifyReceipt"
+#define kServiceName @"MKStoreKit"
 #endif
 
 #define kProductFetchedNotification @"MKStoreKitProductsFetched"
